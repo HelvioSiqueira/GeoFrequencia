@@ -2,17 +2,26 @@ package com.example.geofrequencia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import com.example.geofrequencia.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        showMapActivity()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
+
+        binding.btnOpenMap.setOnClickListener {
+            showMapActivity()
+        }
     }
 
-    private fun showMapActivity(){
+    private fun showMapActivity() {
         MapActivity.open(this)
     }
-
 }
