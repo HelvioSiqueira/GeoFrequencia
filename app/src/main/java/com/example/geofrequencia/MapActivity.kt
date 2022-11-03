@@ -8,10 +8,6 @@ import com.example.geofrequencia.databinding.ActivityMapBinding
 
 class MapActivity : AppCompatActivity() {
 
-    private val fragment: MapFragment by lazy {
-        supportFragmentManager.findFragmentById(R.id.fragmentMap) as MapFragment
-    }
-
     private lateinit var binding: ActivityMapBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,16 +16,6 @@ class MapActivity : AppCompatActivity() {
         binding = ActivityMapBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        initMap()
-    }
-
-    private fun initMap(){
-        fragment.getMapAsync {  }
     }
 
     companion object{

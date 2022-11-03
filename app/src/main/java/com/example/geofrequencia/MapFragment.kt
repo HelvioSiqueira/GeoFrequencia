@@ -17,6 +17,14 @@ class MapFragment : SupportMapFragment() {
     private var googleMap: GoogleMap? = null
     private var origin = LatLng(-23.561706, -46.655981)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        getMapAsync {
+
+        }
+    }
+
     override fun getMapAsync(callback: OnMapReadyCallback) {
         super.getMapAsync {
             googleMap = it
