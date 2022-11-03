@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
@@ -14,8 +16,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 class MapFragment : SupportMapFragment() {
 
+    private val viewModel: MapViewModel by lazy {
+        ViewModelProvider(requireActivity())[MapViewModel::class.java]
+    }
+
     private var googleMap: GoogleMap? = null
-    private var origin = LatLng(-23.561706, -46.655981)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,14 +46,25 @@ class MapFragment : SupportMapFragment() {
             uiSettings.isZoomControlsEnabled = true
         }
 
-        updateMap()
+        viewModel.getMapState().observe(this, Observer { mapState->
+            if(mapState != null){
+                updateMap(mapState)
+            }
+        })
     }
 
-    private fun updateMap() {
+    private fun updateMap(mapState: MapViewModel.MapState) {
         googleMap?.run {
-            animateCamera(CameraUpdateFactory.newLatLngZoom(origin, 17.0F))
-            addMarker(MarkerOptions().position(origin))
+            clear()
+            val origin = mapState.origin
+
+            if(origin != null){
+                addMarker(MarkerOptions()
+                    .position(origin)
+                    .title("Local Atual"))
+
+                animateCamera(CameraUpdateFactory.newLatLngZoom(origin, 17.0F))
+            }
         }
     }
-
 }

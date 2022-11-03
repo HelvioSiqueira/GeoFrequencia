@@ -39,6 +39,8 @@ android {
 
 dependencies {
 
+    implementation 'com.google.android.gms:play-services-auth:20.3.0'
+
     //Lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"

@@ -20,14 +20,14 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     private val job = Job()
 
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO + job
+        get() = Dispatchers.Main + job
 
     private var googleApiClient: GoogleApiClient? = null
     private val locationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(getContext())
     }
 
-    private val conectionStatus = MutableLiveData<GoogleApiConnectionStatus>()
+    private val connectionStatus = MutableLiveData<GoogleApiConnectionStatus>()
     private val currentLocationError = MutableLiveData<LocationError>()
 
     private val mapState = MutableLiveData<MapState>().apply {
@@ -40,7 +40,7 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     }
 
     fun getConnectionStatus(): MutableLiveData<GoogleApiConnectionStatus> {
-        return conectionStatus
+        return connectionStatus
     }
 
     fun getCurrentLocationError(): MutableLiveData<LocationError> {
@@ -52,27 +52,28 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     }
 
     fun connectGoogleApiClient() {
+
         if (googleApiClient == null) {
             googleApiClient = GoogleApiClient.Builder(getContext())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(object : GoogleApiClient.ConnectionCallbacks {
                     override fun onConnected(p0: Bundle?) {
-                        conectionStatus.value = GoogleApiConnectionStatus(true)
+                        connectionStatus.value = GoogleApiConnectionStatus(true)
                     }
 
                     override fun onConnectionSuspended(p0: Int) {
-                        conectionStatus.value = GoogleApiConnectionStatus(false)
+                        connectionStatus.value = GoogleApiConnectionStatus(false)
                         googleApiClient?.connect()
                     }
                 }).addOnConnectionFailedListener { connectionResult ->
-                    conectionStatus.value = GoogleApiConnectionStatus(false, connectionResult)
+                    connectionStatus.value = GoogleApiConnectionStatus(false, connectionResult)
                 }.build()
         }
         googleApiClient?.connect()
     }
 
     fun disconnectGoogleApicClient() {
-        conectionStatus.value = GoogleApiConnectionStatus(false)
+        connectionStatus.value = GoogleApiConnectionStatus(false)
         if (googleApiClient != null && googleApiClient?.isConnected == true) {
             googleApiClient?.disconnect()
         }
@@ -84,7 +85,9 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
             if (location != null) {
                 val latLng = LatLng(location.latitude, location.longitude)
                 mapState.value = mapState.value?.copy(origin = latLng)
-                continuation.resume(false)
+                continuation.resume(true)
+            } else {
+                continuation.resume(true)
             }
         }
             .addOnFailureListener {
