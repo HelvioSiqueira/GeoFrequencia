@@ -49,6 +49,7 @@ class MapActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         viewModel.disconnectGoogleApicClient()
+        viewModel.stopLocationUpdates()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

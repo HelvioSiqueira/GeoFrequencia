@@ -7,8 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.*
 import java.lang.Exception
@@ -34,9 +33,15 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
         value = MapState()
     }
 
+    private val currentLocation = MutableLiveData<LatLng>()
+
     override fun onCleared() {
         super.onCleared()
         job.cancel()
+    }
+
+    fun getCurrentLocation(): MutableLiveData<LatLng> {
+        return currentLocation
     }
 
     fun getConnectionStatus(): MutableLiveData<GoogleApiConnectionStatus> {
@@ -103,6 +108,7 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
             currentLocationError.value = try {
                 val success = withContext(Dispatchers.Default) { loadLastLocation() }
                 if (success) {
+                    startLocationUpdates()
                     null
                 } else {
                     LocationError.ErrorLocationUnavailable
@@ -111,6 +117,29 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
                 LocationError.ErrorLocationUnavailable
             }
         }
+    }
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val location = locationResult.lastLocation
+
+            if (location != null) {
+                currentLocation.value = LatLng(location.latitude, location.longitude)
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun startLocationUpdates() {
+        val locationRequest =
+            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5 * 1000).build()
+
+        locationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    fun stopLocationUpdates() {
+        LocationServices.getFusedLocationProviderClient(getContext())
+            .removeLocationUpdates(locationCallback)
     }
 
     private fun getContext() = getApplication<Application>()
@@ -125,6 +154,6 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     )
 
     sealed class LocationError {
-        object ErrorLocationUnavailable: LocationError()
+        object ErrorLocationUnavailable : LocationError()
     }
 }
