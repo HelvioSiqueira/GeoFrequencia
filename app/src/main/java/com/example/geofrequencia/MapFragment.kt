@@ -1,21 +1,16 @@
 package com.example.geofrequencia
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 
 class MapFragment : SupportMapFragment() {
 
@@ -49,6 +44,8 @@ class MapFragment : SupportMapFragment() {
             uiSettings.isMapToolbarEnabled = true
             uiSettings.isMyLocationButtonEnabled = true
             uiSettings.isZoomControlsEnabled = true
+
+            onMapLongClick()
         }
 
         viewModel.getMapState().observe(this, Observer { mapState ->
@@ -60,15 +57,52 @@ class MapFragment : SupportMapFragment() {
         viewModel.getCurrentLocation().observe(this, Observer { currentLocation ->
             if (currentLocation != null) {
                 val map = MapViewModel.MapState(origin = currentLocation)
-                updateMap(map)
+                //updateMap(map)
+
+                if (markerCurrentLocation == null) {
+                    val icon = BitmapDescriptorFactory
+                        .fromResource(R.drawable.blue_marker)
+                    markerCurrentLocation = googleMap?.addMarker(
+                        MarkerOptions()
+                            .title("Está aqui")
+                            .icon(icon)
+                            .position(currentLocation)
+                    )
+                }
+                markerCurrentLocation?.position = currentLocation
             }
         })
+    }
+
+    private fun onMapLongClick() {
+
+        val pit = PendingIntent.getBroadcast(
+            requireContext(),
+            0,
+            Intent(requireContext(), GeofenceReceiver::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        viewModel.setGeofence(pit, LatLng(4.868556714817011, -43.37071660906077))
     }
 
     private fun updateMap(mapState: MapViewModel.MapState) {
         googleMap?.run {
             clear()
             markerCurrentLocation = null
+            val geofenceInfo = mapState.geofenceInfo
+
+            if (geofenceInfo != null) {
+                val latLng = LatLng(geofenceInfo.latitude, geofenceInfo.longitude)
+                addCircle(
+                    CircleOptions()
+                        .strokeWidth(2f)
+                        .fillColor(0x990000FF.toInt())
+                        .center(latLng)
+                        .radius(geofenceInfo.radius.toDouble())
+                )
+            }
+
             val origin = mapState.origin
 
             if (origin != null) {

@@ -2,6 +2,7 @@ package com.example.geofrequencia
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.app.PendingIntent
 import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -34,6 +35,8 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     }
 
     private val currentLocation = MutableLiveData<LatLng>()
+
+    private val geofenceDb: GeofenceDb by lazy { GeofenceDb(getContext()) }
 
     override fun onCleared() {
         super.onCleared()
@@ -137,6 +140,39 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
         locationClient.requestLocationUpdates(locationRequest, locationCallback, null)
     }
 
+    @SuppressLint("MissingPermission")
+    fun setGeofence(pit: PendingIntent, latLng: LatLng) {
+        if (googleApiClient?.isConnected == true) {
+            val geofenceInfo = GeofenceInfo(
+                "1",
+                latLng.latitude, latLng.longitude,
+                80f,
+                Geofence.NEVER_EXPIRE,
+                Geofence.GEOFENCE_TRANSITION_DWELL
+                        or Geofence.GEOFENCE_TRANSITION_ENTER
+                        or Geofence.GEOFENCE_TRANSITION_EXIT
+            )
+
+            val request = GeofencingRequest.Builder()
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                .addGeofences(listOf(geofenceInfo.getGeofence()))
+                .build()
+
+            LocationServices.getGeofencingClient(getContext())
+                .addGeofences(request, pit)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        geofenceDb.saveGeofence(geofenceInfo)
+                        mapState.value = mapState.value?.copy(geofenceInfo = geofenceInfo)
+                    }
+                }
+        }
+    }
+
+    fun getGeofence(id: String): GeofenceInfo? {
+        return geofenceDb.getGeofence(id)
+    }
+
     fun stopLocationUpdates() {
         LocationServices.getFusedLocationProviderClient(getContext())
             .removeLocationUpdates(locationCallback)
@@ -145,7 +181,8 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     private fun getContext() = getApplication<Application>()
 
     data class MapState(
-        val origin: LatLng? = null
+        val origin: LatLng? = null,
+        val geofenceInfo: GeofenceInfo? = null
     )
 
     data class GoogleApiConnectionStatus(
