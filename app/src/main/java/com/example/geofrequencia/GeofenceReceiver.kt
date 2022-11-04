@@ -3,13 +3,17 @@ package com.example.geofrequencia
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 
 class GeofenceReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
+
+    override fun onReceive(context: Context?, intent: Intent) {
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
+
+        Log.d("HSV", "Entrou no Geofence Receiver")
 
         if (geofencingEvent!!.hasError()) {
             val errorCode = geofencingEvent.errorCode
@@ -19,7 +23,7 @@ class GeofenceReceiver : BroadcastReceiver() {
             val geofences = geofencingEvent.triggeringGeofences
             val transition = geofencingEvent.geofenceTransition
 
-            geofences!!.forEach { geofence ->
+            geofences?.forEach { geofence ->
                 val msg = when (transition) {
                     Geofence.GEOFENCE_TRANSITION_ENTER ->
                         "Geofence ID: ${geofence.requestId} ENTROU no perímetro"

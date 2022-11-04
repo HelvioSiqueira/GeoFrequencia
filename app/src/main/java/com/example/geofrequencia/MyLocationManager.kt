@@ -16,7 +16,7 @@ class MyLocationManager(context: Context) {
         LocationServices.getFusedLocationProviderClient(context)
 
     private val locationRequest: LocationRequest =
-        LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, TimeUnit.SECONDS.toSeconds(10))
+        LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, TimeUnit.SECONDS.toMillis(10))
             .build()
 
     private val locationUpdatePendingIntent: PendingIntent by lazy {
@@ -26,6 +26,9 @@ class MyLocationManager(context: Context) {
 
     @SuppressLint("MissingPermission")
     fun startLocationUpdates() {
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationUpdatePendingIntent)
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationUpdatePendingIntent
+        )
     }
 }

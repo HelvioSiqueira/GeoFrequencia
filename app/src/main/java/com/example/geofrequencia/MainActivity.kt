@@ -24,10 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        binding.btnOpenMap.setOnClickListener {
-            showMapActivity()
-        }
-
+        viewModel.testGeofence()
         initMonitoring()
     }
 
@@ -59,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        viewModel.test()
+        viewModel.testLocationUpdates()
     }
 
     private fun hasPermission(): Boolean {
@@ -69,10 +66,6 @@ class MainActivity : AppCompatActivity() {
             this,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == granted
-    }
-
-    private fun showMapActivity() {
-        MapActivity.open(this)
     }
 
     companion object {
