@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Se o sistema não for permitido usar o FINE_LOCATION então solicita a permissão
+    //Quando a permissão for concedida começa a monitorar a localização
     private fun initMonitoring() {
         if (!hasPermission()) {
             ActivityCompat.requestPermissions(
@@ -52,13 +54,12 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_PERMISSIONS
             )
-
-            return
         }
 
         viewModel.testLocationUpdates()
     }
 
+    //Checa se o sistema é permitido usar FINE_LOCATION
     private fun hasPermission(): Boolean {
         val granted = PackageManager.PERMISSION_GRANTED
 

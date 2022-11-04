@@ -1,4 +1,4 @@
-package com.example.geofrequencia
+package com.example.geofrequencia.broadcasts
 
 import android.content.BroadcastReceiver
 import android.content.Context

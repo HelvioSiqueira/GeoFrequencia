@@ -1,4 +1,4 @@
-package com.example.geofrequencia
+package com.example.geofrequencia.broadcasts
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -8,9 +8,10 @@ import android.widget.Toast
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 
-class GeofenceReceiver : BroadcastReceiver() {
-
+//Broadcast que será disparado quando o usuario entrar, sair ou permanecer na área por 30s
+class GeofenceBroadcast : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
+
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
 
         Log.d("HSV", "Entrou no Geofence Receiver")
@@ -20,7 +21,11 @@ class GeofenceReceiver : BroadcastReceiver() {
             Toast.makeText(context, "Erro no serviço de localização: $errorCode", Toast.LENGTH_LONG)
                 .show()
         } else {
+            //Usada para quando a mais de uma demarcação(geofence)
+            //Ela irá detectar o trigger em cada demarcação
             val geofences = geofencingEvent.triggeringGeofences
+
+            //Detecta o tipo de transição
             val transition = geofencingEvent.geofenceTransition
 
             geofences?.forEach { geofence ->
