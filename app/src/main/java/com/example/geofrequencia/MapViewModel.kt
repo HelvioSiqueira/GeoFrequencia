@@ -34,6 +34,8 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
         value = MapState()
     }
 
+    private val myLocationManager = MyLocationManager(getContext())
+
     private val currentLocation = MutableLiveData<LatLng>()
 
     private val geofenceDb: GeofenceDb by lazy { GeofenceDb(getContext()) }
@@ -131,6 +133,8 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
             }
         }
     }
+
+    fun test() = myLocationManager.startLocationUpdates()
 
     @SuppressLint("MissingPermission")
     fun startLocationUpdates() {
