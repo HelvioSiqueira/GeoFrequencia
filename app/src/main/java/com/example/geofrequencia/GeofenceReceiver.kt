@@ -22,10 +22,10 @@ class GeofenceReceiver : BroadcastReceiver() {
             geofences!!.forEach { geofence ->
                 val msg = when (transition) {
                     Geofence.GEOFENCE_TRANSITION_ENTER ->
-                        "Geofence ID: ${geofence.requestId} ENTROU do perímetro"
+                        "Geofence ID: ${geofence.requestId} ENTROU no perímetro"
 
                     Geofence.GEOFENCE_TRANSITION_EXIT ->
-                        "Geofence ID: ${geofence.requestId} Saiu do perímetro"
+                        "Geofence ID: ${geofence.requestId} SAIU do perímetro"
 
                     Geofence.GEOFENCE_TRANSITION_DWELL ->
                         "Geofence ID: ${geofence.requestId} PERMANECEU no perímetro por 30s"
