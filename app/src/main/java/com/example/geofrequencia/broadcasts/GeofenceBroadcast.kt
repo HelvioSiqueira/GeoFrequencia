@@ -1,12 +1,11 @@
 package com.example.geofrequencia.broadcasts
 
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import com.example.geofrequencia.NotifManager
+import com.example.geofrequencia.managers.NotifManager
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 

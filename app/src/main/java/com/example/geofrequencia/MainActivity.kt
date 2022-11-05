@@ -1,12 +1,15 @@
 package com.example.geofrequencia
 
 import android.Manifest
+import android.content.ComponentName
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.*
 import com.example.geofrequencia.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         ViewModelProvider(this)[MapViewModel::class.java]
     }
 
+    private lateinit var workManager: WorkManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -24,7 +29,8 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        viewModel.testGeofence()
+        workManager = WorkManager.getInstance(this)
+
         initMonitoring()
     }
 
@@ -56,7 +62,12 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        viewModel.testLocationUpdates()
+
+        //workManager.enqueue(oneTimeWorkRequest)
+        NotifService.defViewModel(viewModel)
+        startService(Intent(this, NotifService::class.java))
+
+
     }
 
     //Checa se o sistema é permitido usar FINE_LOCATION
@@ -68,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == granted
     }
-
+    
     companion object {
         private const val REQUEST_PERMISSIONS = 2
     }

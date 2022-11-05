@@ -39,6 +39,10 @@ android {
 
 dependencies {
 
+
+    //WorkManager
+    implementation "androidx.work:work-runtime:$workmanager_version"
+
     //Gson
     implementation "com.google.code.gson:gson:$gson_version"
 
@@ -57,7 +61,6 @@ dependencies {
     //Google Play Services Maps
     implementation "com.google.android.gms:play-services-maps:$map_version"
 
-    implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

@@ -1,4 +1,4 @@
-package com.example.geofrequencia
+package com.example.geofrequencia.managers
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.geofrequencia.R
 
 object NotifManager {
     private const val CHANNEL_ID = "default"

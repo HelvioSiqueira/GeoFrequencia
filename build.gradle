@@ -2,10 +2,12 @@
 buildscript {
     ext {
         map_version = "18.1.0"
-        playservices_version = "21.0.0"
+        playservices_version = "21.0.1"
         coroutines_version = "1.6.4"
         lifecycle_version = "2.2.0"
         gson_version = "2.10"
+        workmanager_version = "2.7.1"
+        koin_version = "3.2.0"
     }
 
     repositories {

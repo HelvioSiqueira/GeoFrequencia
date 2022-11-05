@@ -2,6 +2,7 @@ package com.example.geofrequencia
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.work.WorkManager
 import com.example.geofrequencia.managers.MyGeofenceMananger
 import com.example.geofrequencia.managers.MyLocationManager
 import kotlinx.coroutines.*
@@ -23,6 +24,15 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
 
     fun testLocationUpdates() = myLocationManager.startLocationUpdates()
     fun testGeofence() = myGeofenceManager.defGeofence()
+
+    fun testService(){
+        launch {
+            withContext(Dispatchers.Default){
+                testLocationUpdates()
+                testGeofence()
+            }
+        }
+    }
 
     private fun getContext() = getApplication<Application>()
 }
