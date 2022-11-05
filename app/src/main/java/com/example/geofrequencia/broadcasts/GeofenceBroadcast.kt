@@ -1,16 +1,18 @@
 package com.example.geofrequencia.broadcasts
 
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.example.geofrequencia.NotifManager
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 
 //Broadcast que será disparado quando o usuario entrar, sair ou permanecer na área por 30s
 class GeofenceBroadcast : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent) {
+    override fun onReceive(context: Context, intent: Intent) {
 
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
 
@@ -29,19 +31,20 @@ class GeofenceBroadcast : BroadcastReceiver() {
             val transition = geofencingEvent.geofenceTransition
 
             geofences?.forEach { geofence ->
-                val msg = when (transition) {
+                when (transition) {
                     Geofence.GEOFENCE_TRANSITION_ENTER ->
-                        "Geofence ID: ${geofence.requestId} ENTROU no perímetro"
+                        Log.d("HSV", "Geofence ID: ${geofence.requestId} ENTROU no perímetro")
 
                     Geofence.GEOFENCE_TRANSITION_EXIT ->
-                        "Geofence ID: ${geofence.requestId} SAIU do perímetro"
+                        Log.d("HSV", "Geofence ID: ${geofence.requestId} SAIU do perímetro")
 
-                    Geofence.GEOFENCE_TRANSITION_DWELL ->
-                        "Geofence ID: ${geofence.requestId} PERMANECEU no perímetro por 30s"
+                    Geofence.GEOFENCE_TRANSITION_DWELL -> {
+                        NotifManager.notification(context, "PERMANECEU no perímetro por 30s")
+                        Log.d("HSV", "${geofence.requestId}: PERMANECEU no perímetro por 30s")
+                    }
                     else ->
-                        "Erro no Geofence: $transition"
+                        Log.d("HSV", "Erro no Geofence: $transition")
                 }
-                Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
             }
         }
     }

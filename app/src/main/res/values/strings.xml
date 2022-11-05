@@ -4,4 +4,10 @@
     <string name="map_error_get_current_location">Erro ao obter a localização atual</string>
     <string name="map_error_permissions">Você deve aceitar as permissões para executar a aplicação</string>
 
+    <!--Nome e descrições do canal-->
+    <string name="notif_channel_name">Padrão</string>
+    <string name="notif_channel_description">Canal padrão de notificações</string>
+
+    <string name="notif_title">GeoFrequencia</string>
+
 </resources>
