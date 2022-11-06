@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
@@ -29,9 +30,9 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        workManager = WorkManager.getInstance(this)
 
-        initMonitoring()
+
+        //initMonitoring()
     }
 
     override fun onRequestPermissionsResult(
@@ -79,7 +80,25 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == granted
     }
-    
+
+    private fun buildOneTimeWorkRemoteWorkRequest(
+        componentName: ComponentName, listenableWorkerClass: Class<out ListenableWorker>
+    ): OneTimeWorkRequest {
+
+        // ARGUMENT_PACKAGE_NAME and ARGUMENT_CLASS_NAME are used to determine the service
+        // that a Worker binds to. By specifying these parameters, we can designate the process a
+        // Worker runs in.
+        val data: Data = Data.Builder()
+            .putString("ARGUMENT_PACKAGE_NAME", componentName.packageName)
+            .putString("ARGUMENT_CLASS_NAME", componentName.className)
+            .build()
+
+        return OneTimeWorkRequest.Builder(listenableWorkerClass)
+            .setInputData(data)
+            .build()
+    }
+
+
     companion object {
         private const val REQUEST_PERMISSIONS = 2
     }

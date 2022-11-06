@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -24,8 +25,7 @@
 
         <service
             android:name=".NotifService"
-            android:enabled="true"
-            android:foregroundServiceType="location" />
+            android:enabled="true"/>
 
         <receiver android:name=".broadcasts.GeofenceBroadcast" />
         <receiver android:name=".broadcasts.LocationUpdatesBroadcast" />
@@ -50,6 +50,18 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
+
+        <receiver android:name=".EventReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.geofrequencia.ACTION_EVENT"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

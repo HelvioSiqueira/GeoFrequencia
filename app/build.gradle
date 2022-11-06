@@ -40,8 +40,12 @@ android {
 dependencies {
 
 
+    implementation 'androidx.concurrent:concurrent-futures-ktx:1.1.0'
+
+    implementation "androidx.work:work-multiprocess:2.7.1"
+
     //WorkManager
-    implementation "androidx.work:work-runtime:$workmanager_version"
+    implementation "androidx.work:work-runtime-ktx:$workmanager_version"
 
     //Gson
     implementation "com.google.code.gson:gson:$gson_version"
