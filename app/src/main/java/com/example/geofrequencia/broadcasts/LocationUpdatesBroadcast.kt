@@ -10,7 +10,7 @@ class LocationUpdatesBroadcast : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
         LocationResult.extractResult(intent)?.let { locationResult ->
-            //Toast.makeText(context, "${locationResult.lastLocation?.latitude} | ${locationResult.lastLocation?.longitude}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "${locationResult.lastLocation?.latitude} | ${locationResult.lastLocation?.longitude}", Toast.LENGTH_LONG).show()
         }
     }
 }

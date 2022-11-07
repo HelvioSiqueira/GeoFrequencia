@@ -30,7 +30,13 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        val testRequest = OneTimeWorkRequest.Builder(TestWork::class.java)
+            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+            .build()
 
+        workManager = WorkManager.getInstance(this)
+
+        workManager.beginWith(testRequest).enqueue()
 
         //initMonitoring()
     }
