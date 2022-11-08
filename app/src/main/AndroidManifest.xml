@@ -24,10 +24,6 @@
         android:theme="@style/Theme.GeoFrequencia"
         tools:targetApi="31">
 
-        <service
-            android:name=".NotifService"
-            android:enabled="true"/>
-
         <receiver android:name=".broadcasts.GeofenceBroadcast" />
         <receiver android:name=".broadcasts.LocationUpdatesBroadcast" />
 

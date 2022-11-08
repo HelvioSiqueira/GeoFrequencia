@@ -2,19 +2,15 @@ package com.example.geofrequencia
 
 import android.Manifest
 import android.content.ComponentName
-import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
 import com.example.geofrequencia.databinding.ActivityMainBinding
 import com.example.geofrequencia.databinding.LayoutBottonSheetBinding
-import com.example.geofrequencia.managers.MyGeofenceMananger
 
 class MainActivity : AppCompatActivity() {
 
@@ -74,9 +70,6 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         workManager.beginWith(testRequest).enqueue()
-
-        //NotifService.defViewModel(viewModel)
-        //startService(Intent(this, NotifService::class.java))
     }
 
     //Checa se o sistema é permitido usar FINE_LOCATION
