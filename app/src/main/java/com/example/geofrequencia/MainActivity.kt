@@ -9,13 +9,18 @@ import android.os.Bundle
 
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
 import com.example.geofrequencia.databinding.ActivityMainBinding
+import com.example.geofrequencia.databinding.LayoutBottonSheetBinding
+import com.example.geofrequencia.managers.MyGeofenceMananger
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var calendarBinding: LayoutBottonSheetBinding
 
     private val viewModel: MapViewModel by lazy {
         ViewModelProvider(this)[MapViewModel::class.java]
@@ -27,18 +32,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        calendarBinding = LayoutBottonSheetBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
 
-        val testRequest = OneTimeWorkRequest.Builder(TestWork::class.java)
-            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-            .build()
-
-        workManager = WorkManager.getInstance(this)
-
-        workManager.beginWith(testRequest).enqueue()
-
-        //initMonitoring()
+        initMonitoring()
     }
 
     override fun onRequestPermissionsResult(
@@ -69,12 +67,16 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        workManager = WorkManager.getInstance(this)
 
-        //workManager.enqueue(oneTimeWorkRequest)
-        NotifService.defViewModel(viewModel)
-        startService(Intent(this, NotifService::class.java))
+        val testRequest = OneTimeWorkRequest.Builder(TestWork::class.java)
+            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+            .build()
 
+        workManager.beginWith(testRequest).enqueue()
 
+        //NotifService.defViewModel(viewModel)
+        //startService(Intent(this, NotifService::class.java))
     }
 
     //Checa se o sistema é permitido usar FINE_LOCATION

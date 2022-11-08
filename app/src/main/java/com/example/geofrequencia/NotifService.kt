@@ -22,6 +22,7 @@ class NotifService: Service() {
     }
 
     private fun start(){
+
         Log.d("HSV", "Setando")
         viewModel.testService()
     }
