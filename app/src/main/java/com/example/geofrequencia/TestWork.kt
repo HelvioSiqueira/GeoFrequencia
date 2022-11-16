@@ -10,7 +10,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.work.*
-import com.example.geofrequencia.managers.MyGeofenceMananger
+import com.example.geofrequencia.managers.MyGeofenceManager
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -20,7 +20,7 @@ class TestWork(context: Context, workerParams: WorkerParameters) : CoroutineWork
 
     private lateinit var mediaPlayer: MediaPlayer
 
-    private val myGeofenceMananger = MyGeofenceMananger(applicationContext)
+    private val myGeofenceManager = MyGeofenceManager(applicationContext)
 
     override suspend fun doWork(): Result {
 

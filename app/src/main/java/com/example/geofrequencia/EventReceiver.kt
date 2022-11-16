@@ -1,8 +1,12 @@
 package com.example.geofrequencia
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.SystemClock
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
@@ -18,8 +22,10 @@ class EventReceiver: BroadcastReceiver() {
                 .build()
 
             workManager = WorkManager.getInstance(context)
-
             workManager.beginWith(testRequest).enqueue()
+
         }
     }
+
+
 }

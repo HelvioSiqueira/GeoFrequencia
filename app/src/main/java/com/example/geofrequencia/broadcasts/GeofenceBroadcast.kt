@@ -31,8 +31,10 @@ class GeofenceBroadcast : BroadcastReceiver() {
 
             geofences?.forEach { geofence ->
                 when (transition) {
-                    Geofence.GEOFENCE_TRANSITION_ENTER ->
+                    Geofence.GEOFENCE_TRANSITION_ENTER -> {
+                        NotifManager.notification(context, "ENTROU no perímetro")
                         Log.d("HSV", "Geofence ID: ${geofence.requestId} ENTROU no perímetro")
+                    }
 
                     Geofence.GEOFENCE_TRANSITION_EXIT ->
                         Log.d("HSV", "Geofence ID: ${geofence.requestId} SAIU do perímetro")
