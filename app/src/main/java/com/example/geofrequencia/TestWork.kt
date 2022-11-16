@@ -11,8 +11,12 @@ import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.work.*
 import com.example.geofrequencia.managers.MyGeofenceMananger
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class TestWork(context: Context, workerParams: WorkerParameters) : CoroutineWorker(context, workerParams) {
+class TestWork(context: Context, workerParams: WorkerParameters) : CoroutineWorker(context, workerParams), KoinComponent {
+
+    private val viewModel: MapViewModel by inject()
 
     private lateinit var mediaPlayer: MediaPlayer
 
@@ -20,7 +24,7 @@ class TestWork(context: Context, workerParams: WorkerParameters) : CoroutineWork
 
     override suspend fun doWork(): Result {
 
-            myGeofenceMananger.defGeofence()
+            viewModel.testGeofence()
 
             mediaPlayer = MediaPlayer.create(applicationContext, Settings.System.DEFAULT_RINGTONE_URI)
             mediaPlayer.isLooping = true

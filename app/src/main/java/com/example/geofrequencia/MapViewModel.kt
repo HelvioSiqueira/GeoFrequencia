@@ -1,6 +1,7 @@
 package com.example.geofrequencia
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.work.WorkManager
 import com.example.geofrequencia.managers.MyGeofenceMananger
@@ -20,7 +21,10 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
         job.cancel()
     }
 
-    fun testGeofence() = myGeofenceManager.defGeofence()
+    fun testGeofence(){
+
+        myGeofenceManager.defGeofence()
+    }
 
     private fun getContext() = getApplication<Application>()
 }
