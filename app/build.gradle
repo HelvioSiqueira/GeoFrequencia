@@ -39,8 +39,7 @@ android {
 
 dependencies {
 
-
-    implementation 'androidx.concurrent:concurrent-futures-ktx:1.1.0'
+    implementation "io.insert-koin:koin-android:$koin_version"
 
     implementation "androidx.work:work-multiprocess:2.7.1"
 

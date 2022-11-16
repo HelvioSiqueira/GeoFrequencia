@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         workManager = WorkManager.getInstance(this)
 
         val testRequest = OneTimeWorkRequest.Builder(TestWork::class.java)
-            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+            .setExpedited(OutOfQuotaPolicy.DROP_WORK_REQUEST)
             .build()
 
         workManager.beginWith(testRequest).enqueue()

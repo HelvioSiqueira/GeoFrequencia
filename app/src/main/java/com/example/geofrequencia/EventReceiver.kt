@@ -10,13 +10,11 @@ import androidx.work.WorkManager
 class EventReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
-        val action = intent.action
-
         val workManager: WorkManager
 
-        if(Intent.ACTION_BOOT_COMPLETED == action){
+        if(Intent.ACTION_BOOT_COMPLETED == intent.action){
             val testRequest = OneTimeWorkRequest.Builder(TestWork::class.java)
-                .setExpedited(OutOfQuotaPolicy.DROP_WORK_REQUEST)
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .build()
 
             workManager = WorkManager.getInstance(context)

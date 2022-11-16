@@ -7,7 +7,7 @@ buildscript {
         lifecycle_version = "2.2.0"
         gson_version = "2.10"
         workmanager_version = "2.7.1"
-        koin_version = "3.2.0"
+        koin_version = "3.2.2"
     }
 
     repositories {

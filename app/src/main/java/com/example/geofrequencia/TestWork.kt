@@ -9,21 +9,17 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
 import com.example.geofrequencia.managers.MyGeofenceMananger
-import com.example.geofrequencia.managers.MyLocationManager
 
 class TestWork(context: Context, workerParams: WorkerParameters) : CoroutineWorker(context, workerParams) {
 
     private lateinit var mediaPlayer: MediaPlayer
 
-    private val myLocationManager = MyLocationManager(applicationContext)
     private val myGeofenceMananger = MyGeofenceMananger(applicationContext)
 
     override suspend fun doWork(): Result {
 
-            myLocationManager.startLocationUpdates()
             myGeofenceMananger.defGeofence()
 
             mediaPlayer = MediaPlayer.create(applicationContext, Settings.System.DEFAULT_RINGTONE_URI)
@@ -66,6 +62,4 @@ class TestWork(context: Context, workerParams: WorkerParameters) : CoroutineWork
         private const val NOTIFICATION_CHANNEL_ID = "11"
         private const val NOTIFICATION_CHANNEL_NAME = "Work Service"
     }
-
-
 }
