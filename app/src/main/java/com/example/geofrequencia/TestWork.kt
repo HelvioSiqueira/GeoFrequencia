@@ -20,8 +20,6 @@ class TestWork(context: Context, workerParams: WorkerParameters) : CoroutineWork
 
     private lateinit var mediaPlayer: MediaPlayer
 
-    private val myGeofenceManager = MyGeofenceManager(applicationContext)
-
     override suspend fun doWork(): Result {
 
             viewModel.testGeofence()

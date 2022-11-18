@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -23,7 +23,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GeoFrequencia"
         tools:targetApi="31">
+        <receiver
+            android:name=".broadcasts.GeofenceUpdateBroadcast"
+            android:enabled="true"
+            android:exported="true">
 
+
+        </receiver>
         <receiver android:name=".broadcasts.GeofenceBroadcast" />
 
         <activity
@@ -47,14 +53,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
-        <receiver android:name=".EventReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.example.geofrequencia.ACTION_EVENT"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
+        <receiver
+            android:name=".EventReceiver"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
 
+            <intent-filter>
+                <action android:name="com.example.geofrequencia.ACTION_EVENT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
+            </intent-filter>
+
+        </receiver>
     </application>
 
 </manifest>

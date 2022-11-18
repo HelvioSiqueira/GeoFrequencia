@@ -10,6 +10,8 @@ class MapViewModel(app: Application) : AndroidViewModel(app) {
     private val myGeofenceManager = MyGeofenceManager(getContext())
     private val myLocationManager = MyLocationManager(getContext())
 
+    var noLocal: Boolean = false
+
     fun testGeofence(){
         myGeofenceManager.defGeofence()
         myLocationManager.startLocationUpdates()

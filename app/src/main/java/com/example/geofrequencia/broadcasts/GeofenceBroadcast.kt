@@ -5,17 +5,21 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.example.geofrequencia.MapViewModel
 import com.example.geofrequencia.managers.NotifManager
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 //Broadcast que será disparado quando o usuario entrar, sair ou permanecer na área por 30s
-class GeofenceBroadcast : BroadcastReceiver() {
+class GeofenceBroadcast : BroadcastReceiver(), KoinComponent{
+
+    private val viewModel: MapViewModel by inject()
+
     override fun onReceive(context: Context, intent: Intent) {
 
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
-
-        Log.d("HSV", "Entrou no Geofence Receiver")
 
         if (geofencingEvent!!.hasError()) {
             val errorCode = geofencingEvent.errorCode
@@ -32,12 +36,18 @@ class GeofenceBroadcast : BroadcastReceiver() {
             geofences?.forEach { geofence ->
                 when (transition) {
                     Geofence.GEOFENCE_TRANSITION_ENTER -> {
-                        NotifManager.notification(context, "ENTROU no perímetro")
-                        Log.d("HSV", "Geofence ID: ${geofence.requestId} ENTROU no perímetro")
+                        //NotifManager.notification(context, "ENTROU no perímetro")
+                       // Log.d("HSV", "Geofence ID: ${geofence.requestId} ENTROU no perímetro")
+                        viewModel.noLocal = true
+                        NotifManager.notification(context, viewModel.noLocal.toString())
                     }
 
-                    Geofence.GEOFENCE_TRANSITION_EXIT ->
-                        Log.d("HSV", "Geofence ID: ${geofence.requestId} SAIU do perímetro")
+                    Geofence.GEOFENCE_TRANSITION_EXIT ->{
+                        //NotifManager.notification(context, "SAIU do perímetro")
+                        //Log.d("HSV", "Geofence ID: ${geofence.requestId} SAIU do perímetro")
+                        viewModel.noLocal = false
+                        NotifManager.notification(context, viewModel.noLocal.toString())
+                    }
 
                     Geofence.GEOFENCE_TRANSITION_DWELL -> {
                         NotifManager.notification(context, "PERMANECEU no perímetro por 30s")
